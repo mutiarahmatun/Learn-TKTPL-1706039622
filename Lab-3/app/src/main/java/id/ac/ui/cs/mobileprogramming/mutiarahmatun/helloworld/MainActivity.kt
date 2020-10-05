@@ -13,9 +13,15 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     private var seconds = 0
     private var running = false
+    private var wasRunning = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        if (savedInstanceState != null) {
+            seconds = savedInstanceState.getInt("seconds")
+            running = savedInstanceState.getBoolean("running")
+            wasRunning = savedInstanceState.getBoolean("wasRunning")
+        }
         runTimer()
         exitButton.setOnClickListener {
             super.onBackPressed()
@@ -27,6 +33,12 @@ class MainActivity : AppCompatActivity() {
             "Click Exit to out from this app",
             Toast.LENGTH_LONG
         ).show()
+    }
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putInt("seconds", seconds)
+        savedInstanceState.putBoolean("running", running)
+        savedInstanceState.putBoolean("wasRunning", wasRunning)
     }
     private fun runTimer() {
         val timeView = findViewById(R.id.time_view) as TextView
@@ -51,13 +63,14 @@ class MainActivity : AppCompatActivity() {
 
     //Start the stopwatch running when the Start button is clicked.
     fun onClickStart(view: View?) {
-        running = true
+        running = true;
     }
 
     //Stop the stopwatch running when the Stop button is clicked.
     fun onClickStop(view: View?) {
         running = false
     }
+
 
     //Reset the stopwatch when the Reset button is clicked.
     fun onClickReset(view: View?) {
